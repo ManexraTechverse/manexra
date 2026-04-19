@@ -1,0 +1,153 @@
+{
+  "entities": {
+    "Test": {
+      "title": "Test",
+      "description": "Definition of an assessment test",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "type": { "type": "string" },
+        "totalMarks": { "type": "number" },
+        "passingMarks": { "type": "number" },
+        "duration": { "type": "string" },
+        "startDate": { "type": "string", "format": "date" },
+        "endDate": { "type": "string", "format": "date" },
+        "isActive": { "type": "boolean" },
+        "questionsCount": { "type": "number" }
+      },
+      "required": ["name", "type", "totalMarks", "duration"]
+    },
+    "Question": {
+      "title": "Question",
+      "description": "A single question within a test",
+      "type": "object",
+      "properties": {
+        "text": { "type": "string" },
+        "type": { "type": "string", "enum": ["mcq", "tf", "short", "programming", "file"] },
+        "options": { "type": "array", "items": { "type": "string" } },
+        "correctAnswer": { "type": "string" },
+        "marks": { "type": "number" }
+      },
+      "required": ["text", "type", "marks"]
+    },
+    "Submission": {
+      "title": "Submission",
+      "description": "Student test submission",
+      "type": "object",
+      "properties": {
+        "studentName": { "type": "string" },
+        "email": { "type": "string" },
+        "phone": { "type": "string" },
+        "testId": { "type": "string" },
+        "testName": { "type": "string" },
+        "score": { "type": "string" },
+        "submittedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["studentName", "email", "testId"]
+    },
+    "Enrollment": {
+      "title": "Enrollment",
+      "description": "Course enrollment application",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "phone": { "type": "string" },
+        "address": { "type": "string" },
+        "course": { "type": "string" },
+        "submittedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "email", "phone", "address", "course"]
+    },
+    "ContactMessage": {
+      "title": "ContactMessage",
+      "description": "General contact form message",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "subject": { "type": "string" },
+        "message": { "type": "string" },
+        "submittedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "email", "subject", "message"]
+    },
+    "Job": {
+      "title": "Job",
+      "description": "Definition of a career opportunity",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "responsibilities": { "type": "string" },
+        "type": { "type": "string" },
+        "location": { "type": "string" },
+        "isActive": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "description", "responsibilities", "type", "location"]
+    },
+    "JobApplication": {
+      "title": "JobApplication",
+      "description": "Submission from a job applicant",
+      "type": "object",
+      "properties": {
+        "jobId": { "type": "string" },
+        "jobTitle": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "phone": { "type": "string" },
+        "resumeUrl": { "type": "string" },
+        "experience": { "type": "string" },
+        "message": { "type": "string" },
+        "submittedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["jobId", "name", "email", "phone"]
+    },
+    "Product": {
+      "title": "Product",
+      "description": "A ready-to-use software solution",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "iconName": { "type": "string" },
+        "price": { "type": "string" },
+        "features": { "type": "string" },
+        "isActive": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "description", "iconName"]
+    }
+  },
+  "firestore": {
+    "/tests/{testId}": {
+      "schema": "Test",
+      "description": "Collection of available tests"
+    },
+    "/submissions/{submissionId}": {
+      "schema": "Submission",
+      "description": "Collection of student test submissions"
+    },
+    "/enrollments/{enrollmentId}": {
+      "schema": "Enrollment",
+      "description": "Collection of course enrollment applications"
+    },
+    "/contact_messages/{messageId}": {
+      "schema": "ContactMessage",
+      "description": "Collection of general contact messages"
+    },
+    "/jobs/{jobId}": {
+      "schema": "Job",
+      "description": "Collection of job openings"
+    },
+    "/job_applications/{applicationId}": {
+      "schema": "JobApplication",
+      "description": "Collection of job portal submissions"
+    },
+    "/products/{productId}": {
+      "schema": "Product",
+      "description": "Collection of ready products"
+    }
+  }
+}

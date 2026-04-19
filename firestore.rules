@@ -1,0 +1,174 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: tests
+    // Document ID: auto-generated
+    // Fields:
+    //   - name: string (required)
+    //   - type: string (required)
+    //   - duration: string
+    //   - questions: number
+    //
+    // Collection: submissions
+    // Document ID: auto-generated
+    // Fields:
+    //   - studentName: string (required)
+    //   - email: string (required, format: email)
+    //   - phone: string
+    //   - testId: string (required)
+    //   - testName: string
+    //   - score: string
+    //   - submittedAt: string (required, format: iso8601)
+    //
+    // ===============================================================
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      // For this prototype, we allow authorized admin emails
+      // Note: use .lower() for string case normalization in Firestore rules
+      return isAuthenticated() && 
+        (request.auth.token.email.lower() in ["manexratechverse@gmail.com", "manexratechverse@gmal.com", "management.manexratechverse@gmail.com"] || 
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin');
+    }
+
+    function isValidEmail(email) {
+      return email is string && email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+    }
+
+    function isValidDateString(dateStr) {
+      return dateStr is string && dateStr.matches("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.*Z?$");
+    }
+
+    function isValidSubmission(data) {
+      return data.keys().hasAll(['studentName', 'email', 'testId', 'submittedAt']) &&
+             data.studentName is string && data.studentName.size() > 0 && data.studentName.size() < 100 &&
+             isValidEmail(data.email) &&
+             data.testId is string &&
+             (data.submittedAt is timestamp || isValidDateString(data.submittedAt));
+    }
+
+    function isValidEnrollment(data) {
+      return data.keys().hasAll(['name', 'email', 'phone', 'address', 'course', 'submittedAt']) &&
+             data.name is string && data.name.size() > 0 &&
+             isValidEmail(data.email) &&
+             data.phone is string &&
+             data.address is string &&
+             data.course is string &&
+             data.submittedAt is timestamp;
+    }
+
+    function isValidContactMessage(data) {
+      return data.keys().hasAll(['name', 'email', 'subject', 'message', 'submittedAt']) &&
+             data.name is string && data.name.size() > 0 &&
+             isValidEmail(data.email) &&
+             data.subject is string &&
+             data.message is string &&
+             data.submittedAt is timestamp;
+    }
+
+    function isValidTest(data) {
+      return data.keys().hasAll(['name', 'type', 'totalMarks', 'duration']) &&
+             data.name is string && data.name.size() > 0 &&
+             data.type is string &&
+             data.totalMarks is number &&
+             data.duration is string;
+    }
+
+    function isValidQuestion(data) {
+      return data.keys().hasAll(['text', 'type', 'marks']) &&
+             data.text is string &&
+             data.type in ['mcq', 'tf', 'short', 'programming', 'file'] &&
+             data.marks is number;
+    }
+
+    function isValidJob(data) {
+      return data.keys().hasAll(['title', 'description', 'responsibilities', 'type', 'location']) &&
+             data.title is string && data.title.size() > 0 &&
+             data.description is string &&
+             data.responsibilities is string &&
+             data.type is string &&
+             data.location is string;
+    }
+
+    function isValidJobApplication(data) {
+      return data.keys().hasAll(['jobId', 'name', 'email', 'phone', 'submittedAt']) &&
+             data.jobId is string &&
+             data.name is string && data.name.size() > 0 &&
+             isValidEmail(data.email) &&
+             data.phone is string &&
+             data.submittedAt is timestamp;
+    }
+
+    function isValidProduct(data) {
+      return data.keys().hasAll(['title', 'description', 'iconName']) &&
+             data.title is string && data.title.size() > 0 &&
+             data.description is string &&
+             data.iconName is string;
+    }
+
+    // ===============================================================
+    // Rules
+    // ===============================================================
+
+    match /tests/{testId} {
+      allow read: if true; 
+      allow write: if isAdmin();
+
+      match /questions/{questionId} {
+        allow read: if true; // Students need to read questions to take tests
+        allow write: if isAdmin();
+      }
+    }
+
+    match /submissions/{submissionId} {
+      // Students can create submissions without auth (per requirement flow)
+      // but we validate the data strictly
+      allow create: if isValidSubmission(request.resource.data);
+      
+      // Only admins can read or update submissions
+      allow read, update, delete: if isAdmin();
+    }
+
+    match /enrollments/{enrollmentId} {
+      allow create: if isValidEnrollment(request.resource.data);
+      allow read, update, delete: if isAdmin();
+    }
+
+    match /contact_messages/{messageId} {
+      allow create: if isValidContactMessage(request.resource.data);
+      allow read, update, delete: if isAdmin();
+    }
+
+    match /jobs/{jobId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /job_applications/{applicationId} {
+      allow create: if isValidJobApplication(request.resource.data);
+      allow read, update, delete: if isAdmin();
+    }
+
+    match /products/{productId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /users/{userId} {
+      allow read: if isAuthenticated() && request.auth.uid == userId;
+      allow write: if isAdmin();
+    }
+  }
+}
