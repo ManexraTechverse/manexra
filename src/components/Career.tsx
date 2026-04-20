@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Briefcase, GraduationCap, ArrowUpRight, X, User, Mail, Phone, FileText, Send, MapPin, Clock, CheckCircle } from 'lucide-react';
+import { Briefcase, GraduationCap, ArrowUpRight, X, User, Mail, Phone, FileText, Send, MapPin, Clock, CheckCircle, Share2, Copy, Check } from 'lucide-react';
 import { db, handleFirestoreError, OperationType } from '@/firebase';
 import { collection, query, where, orderBy, onSnapshot, addDoc, serverTimestamp } from 'firebase/firestore';
 
@@ -10,6 +10,7 @@ export default function Career() {
   const [showApplyModal, setShowApplyModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [shareSuccess, setShareSuccess] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -31,6 +32,28 @@ export default function Career() {
 
     return () => unsub();
   }, []);
+
+  const handleShare = async (job: any, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    
+    const shareData = {
+      title: `${job.title} | Manexra Techverse`,
+      text: `Check out this job opening for ${job.title} at Manexra Techverse!`,
+      url: `${window.location.origin}${window.location.pathname}#career`
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(`${shareData.text} \n\nApply here: ${shareData.url}`);
+        setShareSuccess(true);
+        setTimeout(() => setShareSuccess(false), 2000);
+      }
+    } catch (err) {
+      console.error('Error sharing:', err);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -134,8 +157,17 @@ export default function Career() {
                     </div>
                   </div>
                 </div>
-                <div className="p-3 bg-white/5 rounded-xl group-hover:bg-ai-primary/20 transition-colors">
-                  <ArrowUpRight className="w-6 h-6 text-white/20 group-hover:text-ai-primary group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+                <div className="flex items-center gap-2">
+                  <button 
+                    onClick={(e) => handleShare(job, e)}
+                    className="p-3 bg-white/5 rounded-xl group-hover:bg-white/10 transition-colors text-white/20 group-hover:text-white/60 relative"
+                    title="Share Job"
+                  >
+                    {shareSuccess ? <Check className="w-5 h-5 text-green-400" /> : <Share2 className="w-5 h-5" />}
+                  </button>
+                  <div className="p-3 bg-white/5 rounded-xl group-hover:bg-ai-primary/20 transition-colors">
+                    <ArrowUpRight className="w-6 h-6 text-white/20 group-hover:text-ai-primary group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+                  </div>
                 </div>
               </motion.div>
             ))}
@@ -213,7 +245,20 @@ export default function Career() {
 
                   {/* Application Form */}
                   <div className="bg-gray-50 p-8 rounded-[2rem] border border-gray-100">
-                    <h3 className="text-2xl font-bold mb-8">Quick Application</h3>
+                    <div className="flex items-center justify-between mb-8">
+                      <h3 className="text-2xl font-bold">Quick Application</h3>
+                      <button 
+                        type="button"
+                        onClick={() => handleShare(selectedJob)}
+                        className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-xl text-xs font-bold uppercase tracking-widest text-gray-500 hover:text-ai-primary hover:border-ai-primary/30 transition-all shadow-sm"
+                      >
+                        {shareSuccess ? (
+                          <>Copied <Check className="w-4 h-4 text-green-500" /></>
+                        ) : (
+                          <>Share Job <Share2 className="w-4 h-4" /></>
+                        )}
+                      </button>
+                    </div>
                     <form onSubmit={handleSubmit} className="space-y-6">
                       <div className="grid sm:grid-cols-2 gap-6">
                         <div className="space-y-2">
@@ -326,4 +371,5 @@ export default function Career() {
     </section>
   );
 }
+
 
