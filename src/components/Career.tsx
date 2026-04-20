@@ -161,7 +161,7 @@ export default function Career() {
               initial={{ opacity: 0, scale: 0.95, y: 40 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 40 }}
-              className="relative w-full max-w-4xl bg-[#0a1128] border border-white/10 rounded-[3rem] shadow-2xl p-8 lg:p-12 overflow-y-auto max-h-[90vh] custom-scrollbar"
+              className="relative w-full max-w-4xl bg-white border border-gray-200 rounded-[3rem] shadow-2xl p-8 lg:p-12 overflow-y-auto max-h-[90vh] custom-scrollbar text-gray-900"
             >
               {showSuccess ? (
                 <div className="text-center py-20">
@@ -169,7 +169,7 @@ export default function Career() {
                     <Send className="text-green-500 w-12 h-12" />
                   </div>
                   <h2 className="text-4xl font-display font-bold mb-4">Application Sent!</h2>
-                  <p className="text-white/60">Thank you for applying. We will review your profile and get back to you soon.</p>
+                  <p className="text-gray-600">Thank you for applying. We will review your profile and get back to you soon.</p>
                 </div>
               ) : (
                 <div className="grid lg:grid-cols-2 gap-12">
@@ -180,7 +180,7 @@ export default function Career() {
                         Hiring Now
                       </span>
                       <h2 className="text-3xl font-display font-bold mb-4">{selectedJob.title}</h2>
-                      <div className="flex gap-4 text-white/40 text-sm">
+                      <div className="flex gap-4 text-gray-500 text-sm">
                         <span className="flex items-center gap-2"><Clock className="w-4 h-4" /> {selectedJob.type}</span>
                         <span className="flex items-center gap-2"><MapPin className="w-4 h-4" /> {selectedJob.location}</span>
                       </div>
@@ -191,7 +191,7 @@ export default function Career() {
                         <h4 className="text-lg font-bold mb-3 flex items-center gap-2 text-ai-secondary">
                           <FileText className="w-5 h-5" /> Job Description
                         </h4>
-                        <p className="text-white/60 leading-relaxed text-sm whitespace-pre-line">
+                        <p className="text-gray-600 leading-relaxed text-sm whitespace-pre-line">
                           {selectedJob.description}
                         </p>
                       </div>
@@ -201,7 +201,7 @@ export default function Career() {
                         </h4>
                         <ul className="space-y-3">
                           {selectedJob.responsibilities.split('\n').map((item: string, i: number) => (
-                            <li key={i} className="flex items-start gap-3 text-sm text-white/60 group">
+                            <li key={i} className="flex items-start gap-3 text-sm text-gray-600 group">
                               <div className="w-1.5 h-1.5 bg-ai-primary rounded-full mt-1.5 group-hover:scale-150 transition-transform" />
                               {item}
                             </li>
@@ -212,33 +212,33 @@ export default function Career() {
                   </div>
 
                   {/* Application Form */}
-                  <div className="bg-white/5 p-8 rounded-[2rem] border border-white/5">
+                  <div className="bg-gray-50 p-8 rounded-[2rem] border border-gray-100">
                     <h3 className="text-2xl font-bold mb-8">Quick Application</h3>
                     <form onSubmit={handleSubmit} className="space-y-6">
                       <div className="grid sm:grid-cols-2 gap-6">
                         <div className="space-y-2">
-                          <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/30 ml-1">Full Name</label>
+                          <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 ml-1">Full Name</label>
                           <div className="relative">
-                            <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
+                            <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300" />
                             <input 
                               required
                               value={formData.name}
                               onChange={(e) => setFormData({...formData, name: e.target.value})}
-                              className="w-full bg-white/5 border border-white/10 rounded-2xl pl-12 pr-4 py-4 outline-none focus:border-ai-primary transition-colors text-sm"
+                              className="w-full bg-white border border-gray-200 rounded-2xl pl-12 pr-4 py-4 outline-none focus:border-ai-primary transition-colors text-sm text-gray-900"
                               placeholder="John Doe"
                             />
                           </div>
                         </div>
                         <div className="space-y-2">
-                          <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/30 ml-1">Email Address</label>
+                          <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 ml-1">Email Address</label>
                           <div className="relative">
-                            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
+                            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300" />
                             <input 
                               required
                               type="email"
                               value={formData.email}
                               onChange={(e) => setFormData({...formData, email: e.target.value})}
-                              className="w-full bg-white/5 border border-white/10 rounded-2xl pl-12 pr-4 py-4 outline-none focus:border-ai-primary transition-colors text-sm"
+                              className="w-full bg-white border border-gray-200 rounded-2xl pl-12 pr-4 py-4 outline-none focus:border-ai-primary transition-colors text-sm text-gray-900"
                               placeholder="john@example.com"
                             />
                           </div>
@@ -247,60 +247,60 @@ export default function Career() {
 
                       <div className="grid sm:grid-cols-2 gap-6">
                         <div className="space-y-2">
-                          <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/30 ml-1">Phone Number</label>
+                          <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 ml-1">Phone Number</label>
                           <div className="relative">
-                            <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
+                            <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300" />
                             <input 
                               required
                               value={formData.phone}
                               onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                              className="w-full bg-white/5 border border-white/10 rounded-2xl pl-12 pr-4 py-4 outline-none focus:border-ai-primary transition-colors text-sm"
+                              className="w-full bg-white border border-gray-200 rounded-2xl pl-12 pr-4 py-4 outline-none focus:border-ai-primary transition-colors text-sm text-gray-900"
                               placeholder="+1 (555) 000-0000"
                             />
                           </div>
                         </div>
                         <div className="space-y-2">
-                          <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/30 ml-1">Total Experience</label>
+                          <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 ml-1">Total Experience</label>
                           <div className="relative">
-                            <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
+                            <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300" />
                             <select 
                               required
                               value={formData.experience}
                               onChange={(e) => setFormData({...formData, experience: e.target.value})}
-                              className="w-full bg-white/5 border border-white/10 rounded-2xl pl-12 pr-4 py-4 outline-none focus:border-ai-primary transition-colors text-sm appearance-none"
+                              className="w-full bg-white border border-gray-200 rounded-2xl pl-12 pr-4 py-4 outline-none focus:border-ai-primary transition-colors text-sm appearance-none text-gray-900"
                             >
-                              <option value="" disabled className="bg-[#0a1128]">Years of Experience</option>
-                              <option value="Fresher" className="bg-[#0a1128]">Fresher</option>
-                              <option value="1-2 Years" className="bg-[#0a1128]">1-2 Years</option>
-                              <option value="3-5 Years" className="bg-[#0a1128]">3-5 Years</option>
-                              <option value="5+ Years" className="bg-[#0a1128]">5+ Years</option>
+                              <option value="" disabled className="bg-white">Years of Experience</option>
+                              <option value="Fresher" className="bg-white">Fresher</option>
+                              <option value="1-2 Years" className="bg-white">1-2 Years</option>
+                              <option value="3-5 Years" className="bg-white">3-5 Years</option>
+                              <option value="5+ Years" className="bg-white">5+ Years</option>
                             </select>
                           </div>
                         </div>
                       </div>
 
                       <div className="space-y-2">
-                        <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/30 ml-1">Resume Link (Google Drive/Dropbox)</label>
+                        <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 ml-1">Resume Link (Google Drive/Dropbox)</label>
                         <div className="relative">
-                          <FileText className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
+                          <FileText className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300" />
                           <input 
                             required
                             type="url"
                             value={formData.resumeUrl}
                             onChange={(e) => setFormData({...formData, resumeUrl: e.target.value})}
-                            className="w-full bg-white/5 border border-white/10 rounded-2xl pl-12 pr-4 py-4 outline-none focus:border-ai-primary transition-colors text-sm"
+                            className="w-full bg-white border border-gray-200 rounded-2xl pl-12 pr-4 py-4 outline-none focus:border-ai-primary transition-colors text-sm text-gray-900"
                             placeholder="https://drive.google.com/..."
                           />
                         </div>
                       </div>
 
                       <div className="space-y-2">
-                        <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/30 ml-1">Cover Letter / Message (Optional)</label>
+                        <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 ml-1">Cover Letter / Message (Optional)</label>
                         <textarea 
                           rows={4}
                           value={formData.message}
                           onChange={(e) => setFormData({...formData, message: e.target.value})}
-                          className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 outline-none focus:border-ai-primary transition-colors text-sm"
+                          className="w-full bg-white border border-gray-200 rounded-2xl p-4 outline-none focus:border-ai-primary transition-colors text-sm text-gray-900"
                           placeholder="Tell us why you are a great fit..."
                         />
                       </div>
@@ -326,3 +326,4 @@ export default function Career() {
     </section>
   );
 }
+
