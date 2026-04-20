@@ -82,7 +82,7 @@ export default function Career() {
   };
 
   return (
-    <section id="career" className="py-24 bg-white/5 relative overflow-hidden">
+    <section id="career" className="py-24 bg-white relative overflow-hidden">
       {/* Background Decor */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-ai-primary/5 blur-[120px] rounded-full -mr-48 -mt-48" />
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-ai-secondary/5 blur-[120px] rounded-full -ml-48 -mb-48" />
@@ -95,9 +95,9 @@ export default function Career() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
-              <h2 className="text-5xl font-display font-bold mb-4">Join Our Team</h2>
+              <h2 className="text-5xl font-display font-bold mb-4 text-gray-900">Join Our Team</h2>
               <div className="w-20 h-1.5 bg-ai-primary rounded-full mb-8 shadow-lg shadow-ai-primary/20" />
-              <p className="text-xl text-white/60 mb-10 leading-relaxed max-w-lg">
+              <p className="text-xl text-gray-600 mb-10 leading-relaxed max-w-lg">
                 We're on a mission to redefine the technology landscape. 
                 Whether you're a seasoned professional or an aspiring talent, 
                 let's build the future together.
@@ -109,8 +109,8 @@ export default function Career() {
                     <GraduationCap className="text-ai-primary w-8 h-8" />
                   </div>
                   <div>
-                    <div className="text-lg font-bold">Internship Programs</div>
-                    <div className="text-sm text-white/50">Nurturing the next generation of tech leaders.</div>
+                    <div className="text-lg font-bold text-gray-900">Internship Programs</div>
+                    <div className="text-sm text-gray-500">Nurturing the next generation of tech leaders.</div>
                   </div>
                 </div>
                 <div className="flex items-center gap-5 p-6 rounded-3xl glass hover:bg-white/10 transition-colors border border-white/5">
@@ -118,8 +118,8 @@ export default function Career() {
                     <Briefcase className="text-ai-secondary w-8 h-8" />
                   </div>
                   <div>
-                    <div className="text-lg font-bold">Professional Careers</div>
-                    <div className="text-sm text-white/50">Scale your impact with industry experts.</div>
+                    <div className="text-lg font-bold text-gray-900">Professional Careers</div>
+                    <div className="text-sm text-gray-500">Scale your impact with industry experts.</div>
                   </div>
                 </div>
               </div>
@@ -138,20 +138,20 @@ export default function Career() {
                   setSelectedJob(job);
                   setShowApplyModal(true);
                 }}
-                className="glass p-8 rounded-[2rem] flex items-center justify-between group hover:border-ai-primary/50 transition-all cursor-pointer border border-white/5 hover:shadow-2xl hover:shadow-ai-primary/10"
+                className={`p-8 rounded-[2rem] flex items-center justify-between group transition-all cursor-pointer border hover:shadow-2xl ${idx === 0 ? 'bg-[#30e6d6] border-[#30e6d6]/20' : 'glass border-gray-100 hover:border-ai-primary/50 hover:shadow-ai-primary/10'}`}
               >
                 <div className="flex items-center gap-6">
                   <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center group-hover:bg-ai-primary transition-all duration-500 shadow-xl">
                     <Briefcase className="text-white group-hover:scale-110 transition-transform w-8 h-8" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold mb-2 group-hover:text-ai-primary transition-colors">{job.title}</h3>
+                    <h3 className={`text-xl font-bold mb-2 transition-colors ${idx === 0 ? 'text-white' : 'text-gray-900 group-hover:text-ai-primary'}`}>{job.title}</h3>
                     <div className="flex gap-4 items-center">
-                      <span className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-white/40 group-hover:text-white/60 transition-colors">
+                      <span className={`flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest transition-colors ${idx === 0 ? 'text-white/80' : 'text-gray-400 group-hover:text-gray-600'}`}>
                         <Clock className="w-3 h-3" /> {job.type}
                       </span>
-                      <span className="w-1 h-1 bg-white/20 rounded-full" />
-                      <span className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-white/40 group-hover:text-white/60 transition-colors">
+                      <span className={`w-1 h-1 rounded-full ${idx === 0 ? 'bg-white/40' : 'bg-gray-300'}`} />
+                      <span className={`flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest transition-colors ${idx === 0 ? 'text-white/80' : 'text-gray-400 group-hover:text-gray-600'}`}>
                         <MapPin className="w-3 h-3" /> {job.location}
                       </span>
                     </div>
@@ -160,13 +160,13 @@ export default function Career() {
                 <div className="flex items-center gap-2">
                   <button 
                     onClick={(e) => handleShare(job, e)}
-                    className="p-3 bg-white/5 rounded-xl group-hover:bg-white/10 transition-colors text-white/20 group-hover:text-white/60 relative"
+                    className={`p-3 rounded-xl transition-colors relative ${idx === 0 ? 'bg-white/20 text-white' : 'bg-gray-100 text-gray-400 hover:text-ai-primary'}`}
                     title="Share Job"
                   >
                     {shareSuccess ? <Check className="w-5 h-5 text-green-400" /> : <Share2 className="w-5 h-5" />}
                   </button>
-                  <div className="p-3 bg-white/5 rounded-xl group-hover:bg-ai-primary/20 transition-colors">
-                    <ArrowUpRight className="w-6 h-6 text-white/20 group-hover:text-ai-primary group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+                  <div className={`p-3 rounded-xl transition-colors ${idx === 0 ? 'bg-white/20' : 'bg-ai-primary/10'}`}>
+                    <ArrowUpRight className={`w-6 h-6 transition-all ${idx === 0 ? 'text-white' : 'text-ai-primary group-hover:translate-x-0.5 group-hover:-translate-y-0.5'}`} />
                   </div>
                 </div>
               </motion.div>
@@ -371,5 +371,6 @@ export default function Career() {
     </section>
   );
 }
+
 
 
