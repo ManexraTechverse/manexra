@@ -434,6 +434,15 @@ export default function AdminPanel() {
     }
   };
 
+  const updateJobApplicationStatus = async (id: string, status: 'accepted' | 'rejected' | 'pending') => {
+    const path = 'job_applications';
+    try {
+      await updateDoc(doc(db, path, id), { status });
+    } catch (err) {
+      handleFirestoreError(err, OperationType.WRITE, path);
+    }
+  };
+
   const saveProduct = async (e: React.FormEvent) => {
     e.preventDefault();
     const path = 'products';
@@ -1024,35 +1033,74 @@ export default function AdminPanel() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100">
-                    {jobApplications.map((app) => (
-                      <tr key={app.id} className="hover:bg-gray-50 transition-colors">
-                        <td className="px-6 py-4">
-                          <div className="font-bold text-gray-900">{app.name}</div>
-                          <div className="text-xs text-gray-400">{app.email}</div>
-                          <div className="text-xs text-gray-400">{app.phone}</div>
-                        </td>
-                        <td className="px-6 py-4 text-gray-600 font-medium">{app.jobTitle}</td>
-                        <td className="px-6 py-4 text-gray-500 text-sm">{app.experience}</td>
-                        <td className="px-6 py-4">
-                          <a 
-                            href={app.resumeUrl} 
-                            target="_blank" 
-                            rel="noopener noreferrer" 
-                            className="text-ai-primary flex items-center gap-1 hover:underline text-xs font-bold"
-                          >
-                            View Resume <ArrowUpRight className="w-3 h-3" />
-                          </a>
-                        </td>
-                        <td className="px-6 py-4 text-right">
-                          <button 
-                            onClick={() => setConfirmDelete({ id: app.id, type: 'job_application', title: `Application from ${app.name}` })}
-                            className="p-2 text-gray-400 hover:text-red-500 transition-colors"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
+                      {jobApplications.map((app) => (
+                        <tr key={app.id} className="hover:bg-gray-50 transition-colors">
+                          <td className="px-6 py-4">
+                            <div className="font-bold text-gray-900">{app.name}</div>
+                            <div className="text-xs text-gray-400">{app.email}</div>
+                            <div className="text-xs text-gray-400">{app.phone}</div>
+                          </td>
+                          <td className="px-6 py-4 text-gray-600 font-medium">{app.jobTitle}</td>
+                          <td className="px-6 py-4 text-gray-500 text-sm">
+                            <div>Exp: {app.experience}</div>
+                            <a 
+                              href={app.resumeUrl} 
+                              target="_blank" 
+                              rel="noopener noreferrer" 
+                              className="text-ai-primary flex items-center gap-1 hover:underline text-xs font-bold mt-1"
+                            >
+                              Resume <ArrowUpRight className="w-3 h-3" />
+                            </a>
+                          </td>
+                          <td className="px-6 py-4">
+                            <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                              app.status === 'accepted' ? 'bg-green-100 text-green-600' : 
+                              app.status === 'rejected' ? 'bg-red-100 text-red-600' : 
+                              'bg-gray-100 text-gray-400'
+                            }`}>
+                              {app.status || 'pending'}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 text-right">
+                            <div className="flex justify-end gap-2">
+                              {(!app.status || app.status === 'pending') && (
+                                <>
+                                  <button 
+                                    onClick={() => updateJobApplicationStatus(app.id, 'accepted')}
+                                    className="p-2 text-green-500 hover:bg-green-50 rounded-lg transition-colors"
+                                    title="Accept Application"
+                                  >
+                                    <CheckCircle className="w-4 h-4" />
+                                  </button>
+                                  <button 
+                                    onClick={() => updateJobApplicationStatus(app.id, 'rejected')}
+                                    className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                                    title="Reject Application"
+                                  >
+                                    <XCircle className="w-4 h-4" />
+                                  </button>
+                                </>
+                              )}
+                              {app.status && app.status !== 'pending' && (
+                                <button 
+                                  onClick={() => updateJobApplicationStatus(app.id, 'pending')}
+                                  className="p-2 text-gray-400 hover:bg-gray-100 rounded-lg transition-colors"
+                                  title="Reset to Pending"
+                                >
+                                  <Clock className="w-4 h-4" />
+                                </button>
+                              )}
+                              <button 
+                                onClick={() => setConfirmDelete({ id: app.id, type: 'job_application', title: `Application from ${app.name}` })}
+                                className="p-2 text-gray-400 hover:text-red-500 transition-colors"
+                                title="Delete"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
                     {jobApplications.length === 0 && (
                       <tr>
                         <td colSpan={5} className="px-6 py-20 text-center text-gray-400">
