@@ -65,6 +65,7 @@ export default function Career() {
         ...formData,
         jobId: selectedJob.id,
         jobTitle: selectedJob.title,
+        status: 'pending',
         submittedAt: serverTimestamp()
       });
       setShowSuccess(true);
@@ -371,6 +372,3 @@ export default function Career() {
     </section>
   );
 }
-
-
-
